@@ -82,9 +82,11 @@ module.exports = (env, argv) => {
         'child_process': false,
         crypto: false,
         "crypto-browserify": require.resolve('crypto-browserify'),
+        buffer: require.resolve('buffer/'),
+        stream: require.resolve('stream-browserify'),
       },
       alias: {
-        buffer: 'buffer'
+        stream: path.join(__dirname, 'node_modules', 'stream-browserify'),
       }
     },
     optimization: {
@@ -131,6 +133,8 @@ function getPlugins(isDev) {
     }),
     new webpack.ProvidePlugin({
       React: "react",
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser',
     }),
     new webpack.DefinePlugin({
       'process.env': { 
@@ -139,9 +143,6 @@ function getPlugins(isDev) {
       },
       IS_DEV: JSON.stringify(isDev),
     }),
-    new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer']
-    }),    
   );
   return plugins;
 }
